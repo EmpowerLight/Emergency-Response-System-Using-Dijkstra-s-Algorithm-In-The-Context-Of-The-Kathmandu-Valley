@@ -21,16 +21,21 @@ function placeMarker(map, latLng, icon, popupContent) {
 }
 
 
-function placeAmbulances(map, ambulanceDatas) {
+function placeAmbulances(map, ambulanceData) {
     const imagePath = '../static/images/ambulance.png';
-    ambulanceDatas.forEach(ambulanceData => {
-        placeMarker(
-            map,
-            [ambulanceData.Latitude, ambulanceData.Longitude],
-            placeIcon(imagePath),
-            `Ambulance ID: ${ambulanceData.ID}`
-        );
-    });
+    // ambulanceDatas.forEach(ambulanceData => {
+    //     placeMarker(
+    //         map,
+    //         [ambulanceData.Latitude, ambulanceData.Longitude],
+    //         placeIcon(imagePath),
+    //         `Ambulance ID: ${ambulanceData.ID}`
+    //     );
+    // });
+    placeMarker(map, 
+                [ambulanceData[2], ambulanceData[1]], 
+                placeIcon(imagePath),
+                `Ambulance ID: ${ambulanceData[0]}`
+                )
 }
 
 function placeEmergencyCircle(map, centerLatLng, radius) {
@@ -57,8 +62,8 @@ async function getEvent() {
 async function initMap() {
     try {
         const singleEvent = await getEvent();
-        const eventOccurCoordinate = [singleEvent.Longitude, singleEvent.Latitude];
-        
+        const eventOccurCoordinate = [singleEvent.Latitude, singleEvent.Longitude];
+
         const map = setupMap(eventOccurCoordinate, 16);
         const emojiPath = '../static/images/eventPersonemoji.png'
 
@@ -66,9 +71,9 @@ async function initMap() {
 
         placeEmergencyCircle(map, eventOccurCoordinate, 1000);
 
-        const ambulanceDatas = await (await fetch('/get_ambulance_data')).json();
-        
-        placeAmbulances(map, ambulanceDatas);
+        const ambulanceData = await (await fetch(`/get_ambulance_data?event_latitude=${singleEvent.Latitude}&event_longitude=${singleEvent.Longitude}`)).json();
+        // console.log(ambulanceData)
+        placeAmbulances(map, ambulanceData);
     } catch (error) {
         console.error('Error initializing map:', error);
        

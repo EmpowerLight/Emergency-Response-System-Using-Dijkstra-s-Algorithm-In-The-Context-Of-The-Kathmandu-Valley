@@ -1,8 +1,24 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import pandas as pd
-
+import numpy as np
 
 app = Flask(__name__)
+
+
+def haversine(lat1, lon1, lat2, lon2):
+    R = 6371.0  # Earth radius in kilometers
+    # Convert latitude and longitude to radians
+    lat1, lon1, lat2, lon2 = np.radians([lat1, lon1, lat2, lon2])
+    # Calculate differences
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    # Haversine formula
+    a = np.sin(dlat / 2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2)**2
+    c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
+    # Calculate distance
+    distance = R * c
+
+    return distance
 
 
 @app.route("/get_event_data")
@@ -12,9 +28,45 @@ def get_event_data():
 
 
 @app.route("/get_ambulance_data")
-def get_ambulance_data():
+def get_ambulance_data(): 
     ambulance_data = pd.read_csv("data/ambulance_data.csv")
-    return ambulance_data.to_json(orient='records')
+
+    # Get the event location and radius from the query parameters
+    event_latitude = float(request.args.get('event_latitude'))
+    event_longitude = float(request.args.get('event_longitude'))
+
+    # Initialize variables
+    selected_ambulance = pd.DataFrame()
+
+    # Loop through each radius from 1 km to 5 km
+    for radius in range(1, 6):
+        # Filter ambulances within the current radius
+        filtered_ambulances = ambulance_data.apply(
+            lambda row: haversine(event_latitude, event_longitude, row['Latitude'], row['Longitude']) <= radius,
+            axis=1
+        )
+
+        # Check if any ambulances are within the current radius
+        if not filtered_ambulances.empty and filtered_ambulances.any():
+            selected_ambulance = ambulance_data[filtered_ambulances].iloc[0]
+            print(radius)
+            break
+
+    # Check if an ambulance was found
+    if not selected_ambulance.empty:
+        # Continue with the rest of your logic using the selected_ambulance data
+        print("Selected Ambulance ID:", selected_ambulance['ID'])
+        return selected_ambulance.to_json(orient='records')
+    else:
+        # Handle the case where no ambulance was found
+        print("No ambulance found within the specified radius.")
+        return pd.DataFrame().to_json(orient='records')
+
+
+@app.route("/get_hospital_data")
+def get_hospital_data():
+    hospital_data = pd.read_csv("data/hospital_data.csv")
+    return hospital_data.to_json(orient='records')
 
 @app.route("/")
 def index():

@@ -1,4 +1,4 @@
-Event ID,Latitude,Longitude,Timestamp,Type
+Event ID,Longitude,Latitude,Timestamp,Type
 1,85.309798,27.703577,11:34.7,Fire
 2,85.319586,27.703229,11:34.7,Fire
 3,85.335958,27.708106,11:34.7,Accident
