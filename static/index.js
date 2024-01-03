@@ -68,7 +68,7 @@ async function getEvent() {
     }
 }
 
-// Inside your initMap function
+//initMap function
 async function initMap() {
     try {
         const singleEvent = await getEvent();

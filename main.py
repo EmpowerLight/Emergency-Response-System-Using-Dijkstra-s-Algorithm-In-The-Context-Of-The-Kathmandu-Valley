@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from shapely.geometry import Point
 from shortest_path_finder import ShortestPathFinder
-
+import concurrent.futures
 
 app = Flask(__name__)
 
@@ -30,70 +30,78 @@ def get_event_data():
     return event_data.to_json(orient='records')
 
 
-@app.route("/get_ambulance_data")
-def get_ambulance_data(): 
+def fetch_ambulance_data_parallel(event_latitude, event_longitude):
     ambulance_data = pd.read_csv("data/ambulance_data.csv")
 
-    # Get the event location and radius from the query parameters
-    event_latitude = float(request.args.get('event_latitude'))
-    event_longitude = float(request.args.get('event_longitude'))
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        # Fetch ambulance data in parallel for each radius
+        for radius in range(1, 6):
+            # Create a list of futures for ambulance data within the current radius
+            ambulance_futures = [executor.submit(fetch_ambulance_data_single, row, event_latitude, event_longitude, radius) for _, row in ambulance_data.iterrows()]
+            
+            # Wait for any ambulance found within the current radius
+            for future in concurrent.futures.as_completed(ambulance_futures):
+                ambulance_json = future.result()
+                if ambulance_json:
+                    return ambulance_json
 
-    # Initialize variables
-    selected_ambulance = pd.DataFrame()
+    # Handle the case where no ambulance was found
+    return pd.DataFrame().to_json(orient='records')
 
-    # Loop through each radius from 1 km to 5 km
-    for radius in range(1, 6):
-        # Filter ambulances within the current radius
-        filtered_ambulances = ambulance_data.apply(
-            lambda row: haversine(event_latitude, event_longitude, row['Latitude'], row['Longitude']) <= radius,
-            axis=1
-        )
 
-        # Check if any ambulances are within the current radius
-        if not filtered_ambulances.empty and filtered_ambulances.any():
-            selected_ambulance = ambulance_data[filtered_ambulances].iloc[0]
-            print(radius)
-            break
-
-    # Check if an ambulance was found
-    if not selected_ambulance.empty:
-        # Continue with the rest of your logic using the selected_ambulance data
-        # print("Selected Ambulance ID:", selected_ambulance['ID'])
-        return selected_ambulance.to_json(orient='records')
+def fetch_ambulance_data_single(row, event_latitude, event_longitude, radius):
+    if haversine(event_latitude, event_longitude, row['Latitude'], row['Longitude']) <= radius:
+        return row.to_json(orient='records')
     else:
-        # Handle the case where no ambulance was found
-        # print("No ambulance found within the specified radius.")
-        return pd.DataFrame().to_json(orient='records')
+        return None
 
+
+@app.route("/get_ambulance_data")
+def get_ambulance_data():
+    try:
+        event_latitude = float(request.args.get('event_latitude'))
+        event_longitude = float(request.args.get('event_longitude'))
+
+        ambulance_data_json = fetch_ambulance_data_parallel(event_latitude, event_longitude)
+
+        if ambulance_data_json:
+            return ambulance_data_json
+        else:
+            return pd.DataFrame().to_json(orient='records')
+
+    except Exception as e:
+        return jsonify(error=str(e))
 
 
 @app.route("/get_shortest_path")
 def get_shortest_path():
     try:
-         # Get the coordinates from the query parameters
         ambulance_latitude = float(request.args.get('ambulance_latitude'))
         ambulance_longitude = float(request.args.get('ambulance_longitude'))
         event_latitude = float(request.args.get('event_latitude'))
         event_longitude = float(request.args.get('event_longitude'))
 
-         # Create Point objects for the ambulance and event locations
         ambulance_location = Point(ambulance_longitude, ambulance_latitude)
         event_location = Point(event_longitude, event_latitude)
 
-        # Create an instance of ShortestPathFinder
         path_finder = ShortestPathFinder()
 
-         # Find the shortest path and its distance
-        shortest_path, distance = path_finder.find_shortest_path(ambulance_location, event_location)
+        # Use parallel processing to find the shortest path
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            shortest_path_future = executor.submit(path_finder.find_shortest_path, ambulance_location, event_location)
 
-        # Extract coordinates from nodes
+            # Wait for the result
+            shortest_path, distance = shortest_path_future.result()
+
         shortest_path_coordinates = path_finder.get_coordinates(shortest_path)
 
         return jsonify({
             'shortestPathCoordinates': shortest_path_coordinates,
             'distance': distance
         })
-    
+
+    except ValueError:
+        return jsonify(error="Invalid input for latitude or longitude.")
     except Exception as e:
         return jsonify(error=str(e))
 
