@@ -89,7 +89,10 @@ def get_shortest_path():
         # Extract coordinates from nodes
         shortest_path_coordinates = path_finder.get_coordinates(shortest_path)
 
-        return jsonify(shortest_path_coordinates)
+        return jsonify({
+            'shortestPathCoordinates': shortest_path_coordinates,
+            'distance': distance
+        })
     
     except Exception as e:
         return jsonify(error=str(e))

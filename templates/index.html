@@ -19,9 +19,16 @@
     
 </head>
 <body>
+    <div class="loader-overlay" id="loader-overlay">
+        <div class="loader" id="loader">
+          <svg viewBox="25 25 50 50">
+            <circle cx="50" cy="50" r="20"></circle>
+          </svg>
+        </div>
+      </div>
+    <div id="message-container"></div>      
     <div id="map"></div>
     
- 
     <script src="{{url_for('static', filename='index.js')}}"></script>
 </body>
 </html>
