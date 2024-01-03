@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import pandas as pd
 import numpy as np
 from shapely.geometry import Point
+from shortest_path_finder import ShortestPathFinder
 
 
 app = Flask(__name__)
@@ -57,12 +58,41 @@ def get_ambulance_data():
     # Check if an ambulance was found
     if not selected_ambulance.empty:
         # Continue with the rest of your logic using the selected_ambulance data
-        print("Selected Ambulance ID:", selected_ambulance['ID'])
+        # print("Selected Ambulance ID:", selected_ambulance['ID'])
         return selected_ambulance.to_json(orient='records')
     else:
         # Handle the case where no ambulance was found
-        print("No ambulance found within the specified radius.")
+        # print("No ambulance found within the specified radius.")
         return pd.DataFrame().to_json(orient='records')
+
+
+
+@app.route("/get_shortest_path")
+def get_shortest_path():
+    try:
+         # Get the coordinates from the query parameters
+        ambulance_latitude = float(request.args.get('ambulance_latitude'))
+        ambulance_longitude = float(request.args.get('ambulance_longitude'))
+        event_latitude = float(request.args.get('event_latitude'))
+        event_longitude = float(request.args.get('event_longitude'))
+
+         # Create Point objects for the ambulance and event locations
+        ambulance_location = Point(ambulance_longitude, ambulance_latitude)
+        event_location = Point(event_longitude, event_latitude)
+
+        # Create an instance of ShortestPathFinder
+        path_finder = ShortestPathFinder()
+
+         # Find the shortest path and its distance
+        shortest_path, distance = path_finder.find_shortest_path(ambulance_location, event_location)
+
+        # Extract coordinates from nodes
+        shortest_path_coordinates = path_finder.get_coordinates(shortest_path)
+
+        return jsonify(shortest_path_coordinates)
+    
+    except Exception as e:
+        return jsonify(error=str(e))
 
 
 @app.route("/get_hospital_data")

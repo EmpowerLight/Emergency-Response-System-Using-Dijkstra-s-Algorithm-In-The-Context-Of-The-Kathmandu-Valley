@@ -1,5 +1,6 @@
 import osmnx as ox
 import networkx as nx
+from geopy.distance import geodesic
 import heapq
 
 class ShortestPathFinder:
@@ -35,8 +36,12 @@ class ShortestPathFinder:
                 return path, distances[end]
 
             for neighbor in self.graph.neighbors(current_node):
-                weight = self.graph[current_node][neighbor].get('length', 1)
-                new_distance = distances[current_node] + weight
+                # Calculate geographic distance using geopy
+                coord1 = (self.graph.nodes[current_node]['y'], self.graph.nodes[current_node]['x'])
+                coord2 = (self.graph.nodes[neighbor]['y'], self.graph.nodes[neighbor]['x'])
+                edge_length = geodesic(coord1, coord2).meters
+                
+                new_distance = distances[current_node] + edge_length
 
                 if new_distance < distances[neighbor]:
                     distances[neighbor] = new_distance
@@ -55,5 +60,3 @@ class ShortestPathFinder:
     def get_coordinates(self, node_list):
         """Extract coordinates from a list of nodes."""
         return [[self.graph.nodes[node]['y'], self.graph.nodes[node]['x']] for node in node_list]
-
-
