@@ -4,6 +4,7 @@ import numpy as np
 from shapely.geometry import Point
 from shortest_path_finder import ShortestPathFinder
 import concurrent.futures
+import ast
 
 app = Flask(__name__)
 
@@ -34,24 +35,38 @@ def fetch_ambulance_data_parallel(event_latitude, event_longitude):
     ambulance_data = pd.read_csv("data/ambulance_data.csv")
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
+        # Create a list to store results
+        results = []
+
         # Fetch ambulance data in parallel for each radius
         for radius in range(1, 6):
             # Create a list of futures for ambulance data within the current radius
             ambulance_futures = [executor.submit(fetch_ambulance_data_single, row, event_latitude, event_longitude, radius) for _, row in ambulance_data.iterrows()]
-            
+
             # Wait for any ambulance found within the current radius
             for future in concurrent.futures.as_completed(ambulance_futures):
-                ambulance_json = future.result()
-                if ambulance_json:
-                    return ambulance_json
+                try:
+                    ambulance_json, ambulance_radius = future.result()
+                    if ambulance_json is not None:
+                        results.append({"ambulance_data": ambulance_json, "radius": ambulance_radius})
+                except Exception as e:
+                    # print(f"Error processing ambulance data: {e}")
+                    pass
+
+        # Return the ambulance if it is available
+        if results:
+            for result in results:
+                if ast.literal_eval(result['ambulance_data'])[3] == "Available":
+                    return result
 
     # Handle the case where no ambulance was found
-    return pd.DataFrame().to_json(orient='records')
+    return {"ambulance_data": pd.DataFrame().to_json(orient='records'), "radius": None}
+
 
 
 def fetch_ambulance_data_single(row, event_latitude, event_longitude, radius):
     if haversine(event_latitude, event_longitude, row['Latitude'], row['Longitude']) <= radius:
-        return row.to_json(orient='records')
+        return row.to_json(orient='records'), radius
     else:
         return None
 
@@ -61,9 +76,8 @@ def get_ambulance_data():
     try:
         event_latitude = float(request.args.get('event_latitude'))
         event_longitude = float(request.args.get('event_longitude'))
-
         ambulance_data_json = fetch_ambulance_data_parallel(event_latitude, event_longitude)
-
+        
         if ambulance_data_json:
             return ambulance_data_json
         else:

@@ -1,64 +1,67 @@
-*{
-    margin: 0;
-    padding: 0;
+* {
+  margin: 0;
+  padding: 0;
 }
 
-#map { height: 100vh; }
+#map { 
+  height: 100vh; 
+}
 
 .loader-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white overlay */
-    display: none; /* Initially hide the overlay and loader */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Make sure the overlay is above other elements */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white overlay */
+  display: none; /* Initially hide the overlay and loader */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Make sure the overlay is above other elements */
 }
 
 .loader {
-    width: 3.75em;
-    transform-origin: center;
-    animation: rotate 2s linear infinite;
+  width: 6em; /* Increase the width */
+  height: 6em; /* Increase the height */
+  transform-origin: center;
+  animation: rotate 2s linear infinite;
 }
 
 circle {
-    fill: none;
-    stroke: #fc2f70;
-    stroke-width: 2;
-    stroke-dasharray: 1, 200;
-    stroke-dashoffset: 0;
-    stroke-linecap: round;
-    animation: dash 1.5s ease-in-out infinite;
+  fill: none;
+  stroke: #fc2f70;
+  stroke-width: 3; /* Increase the stroke width */
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  animation: dash 1.5s ease-in-out infinite;
 }
-  
-  @keyframes rotate {
-    100% {
+
+@keyframes rotate {
+  100% {
       transform: rotate(360deg);
-    }
   }
-  
-  @keyframes dash {
-    0% {
+}
+
+@keyframes dash {
+  0% {
       stroke-dasharray: 1, 200;
       stroke-dashoffset: 0;
-    }
-    50% {
+  }
+  50% {
       stroke-dasharray: 90, 200;
       stroke-dashoffset: -35px;
-    }
-    100% {
-      stroke-dashoffset: -125px;
-    }
   }
-  
+  100% {
+      stroke-dashoffset: -125px;
+  }
+}
+
 #message-container {
-    position: fixed;
-    top: 5%;
-    left: 2%;
-    padding: 10px;
-    background-color: rgba(255, 255, 255, 0.8);
-    z-index: 1001;
+  position: fixed;
+  top: 5%;
+  left: 2%;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 1001;
 }
