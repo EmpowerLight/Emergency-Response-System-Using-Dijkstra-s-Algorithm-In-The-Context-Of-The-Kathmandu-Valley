@@ -77,9 +77,9 @@ def get_ambulance_data():
         event_latitude = float(request.args.get('event_latitude'))
         event_longitude = float(request.args.get('event_longitude'))
         ambulance_data_json = fetch_ambulance_data_parallel(event_latitude, event_longitude)
-        
+
         if ambulance_data_json:
-            return ambulance_data_json
+            return jsonify(ambulance_data_json)
         else:
             return pd.DataFrame().to_json(orient='records')
 
@@ -90,19 +90,19 @@ def get_ambulance_data():
 @app.route("/get_shortest_path")
 def get_shortest_path():
     try:
-        ambulance_latitude = float(request.args.get('ambulance_latitude'))
-        ambulance_longitude = float(request.args.get('ambulance_longitude'))
-        event_latitude = float(request.args.get('event_latitude'))
-        event_longitude = float(request.args.get('event_longitude'))
+        start_latitude = float(request.args.get('start_latitude'))
+        start_longitude = float(request.args.get('start_longitude'))
+        end_latitude = float(request.args.get('end_latitude'))
+        end_longitude = float(request.args.get('end_longitude'))
 
-        ambulance_location = Point(ambulance_longitude, ambulance_latitude)
-        event_location = Point(event_longitude, event_latitude)
+        start_location = Point(start_longitude, start_latitude)
+        end_location = Point(end_longitude, end_latitude)
 
         path_finder = ShortestPathFinder()
 
         # Use parallel processing to find the shortest path
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            shortest_path_future = executor.submit(path_finder.find_shortest_path, ambulance_location, event_location)
+            shortest_path_future = executor.submit(path_finder.find_shortest_path, start_location, end_location)
 
             # Wait for the result
             shortest_path, distance = shortest_path_future.result()
@@ -122,8 +122,18 @@ def get_shortest_path():
 
 @app.route("/get_hospital_data")
 def get_hospital_data():
-    hospital_data = pd.read_csv("data/hospital_data.csv")
-    return hospital_data.to_json(orient='records')
+    try: 
+        event_latitude = float(request.args.get('event_latitude'))
+        event_longitude = float(request.args.get('event_longitude'))
+        hospital_data = pd.read_csv("data/hospital_data.csv")
+        hospital_data['Distance'] = hospital_data.apply(lambda row: haversine(event_latitude, event_longitude, row['Latitude'], row['Longitude']), axis=1)
+        # Find the closest hospital
+        closest_hospital = hospital_data.loc[hospital_data['Distance'].idxmin()]
+        return ast.literal_eval(closest_hospital.to_json(orient='records'))
+    except Exception as e:
+        return pd.DataFrame().to_json(orient='records')
+
+    
 
 @app.route("/")
 def index():
