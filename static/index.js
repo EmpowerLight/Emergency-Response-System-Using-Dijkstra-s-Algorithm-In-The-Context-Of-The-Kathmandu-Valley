@@ -1,8 +1,63 @@
 const loaderOverlay = document.getElementById('loader-overlay');
 const loader = document.getElementById('loader');
 const messageContainer = document.getElementById('message-container');
+const reportLink = document.getElementById('report-link');
+const reportContainerForm = document.getElementById('report-form-container');
+
 let ambulanceMarker;
 let shortestPathPolyline;
+
+
+reportLink.addEventListener("click", e => {
+    e.preventDefault();
+    // Toggle the visibility of the report form
+    reportContainerForm.style.display = reportContainerForm.style.display === 'block' ? 'none' : 'block';
+});
+
+
+function generateReport() {
+    // get user input
+    const patientName = document.getElementById("patient-name").value;
+    const patientCondition = document.getElementById("patient-condition").value;
+
+    // Validate input (you can add more validation as needed)
+    if (!patientName.trim() || !patientCondition.trim()) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    // Send data to the backend for PDF generation
+    fetch('/generate_pdf', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            patient_name: patientName,
+            patient_condition: patientCondition,
+        }),
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        // Create a download link for the generated PDF
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = 'patient_report.pdf';
+        downloadLink.click();
+    })
+    .catch(error => {
+        console.error('Error generating PDF:', error);
+        alert('Error generating PDF. Please try again.');
+    });
+
+    // Hide the report form
+    reportContainerForm.style.display = 'none';
+
+    // Optional: You can reset the form fields
+    reportForm.reset();
+}
+
+
 
 function placeIcon(path) {
     return L.icon({

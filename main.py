@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 import pandas as pd
 import numpy as np
 from shapely.geometry import Point
 from shortest_path_finder import ShortestPathFinder
 import concurrent.futures
 import ast
+from reportlab.pdfgen import canvas
+from io import BytesIO
 
 app = Flask(__name__)
 
@@ -132,6 +134,33 @@ def get_hospital_data():
         return ast.literal_eval(closest_hospital.to_json(orient='records'))
     except Exception as e:
         return pd.DataFrame().to_json(orient='records')
+
+
+
+@app.route("/generate_pdf", methods=["POST"])
+def generate_pdf():
+    # Retrieve data from the frontend
+    data = request.json
+    patient_name = data.get('patient_name')
+    patient_condition = data.get('patient_condition')
+
+    # Generate PDF using reportlab
+    pdf_buffer = BytesIO()
+    pdf = canvas.Canvas(pdf_buffer)
+
+    # Add content to the PDF
+    pdf.drawString(100, 800, f"Patient Name: {patient_name}")
+    pdf.drawString(100, 780, f"Patient Condition: {patient_condition}")
+
+    # Save the PDF to the buffer
+    pdf.save()
+
+    # Move buffer position to the beginning
+    pdf_buffer.seek(0)
+
+    # Return the generated PDF file to the client
+    return send_file(pdf_buffer, as_attachment=True, download_name='patient_report.pdf')
+
 
     
 

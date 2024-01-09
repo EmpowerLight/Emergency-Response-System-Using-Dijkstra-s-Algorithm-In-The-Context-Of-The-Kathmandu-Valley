@@ -28,6 +28,18 @@
       </div>
     <div id="message-container"></div>      
     <div id="map"></div>
+    <div id="report-link">Do you want to generate Report</div>
+    <div id="report-form-container">
+      <form id="report-form">
+          <label for="patient-name">Patient Name:</label>
+          <input type="text" id="patient-name" name="patient-name" required>
+  
+          <label for="patient-condition">Patient Condition:</label>
+          <textarea id="patient-condition" name="patient-condition" rows="4" required></textarea>
+  
+          <button type="button" onclick="generateReport()">Generate Report</button>
+      </form>
+  </div>
     
     <script src="{{url_for('static', filename='index.js')}}"></script>
 </body>
