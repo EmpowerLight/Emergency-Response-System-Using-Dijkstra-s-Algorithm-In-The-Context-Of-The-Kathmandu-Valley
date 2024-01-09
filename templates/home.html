@@ -1,0 +1,50 @@
+{%include 'header.html'%}
+
+<link rel="stylesheet" href="{{url_for('static', filename='css/home.css')}}">
+
+{%include 'navigation.html' %}
+
+ <!-- Ambulance Section -->
+ <div class="ambulance-section">
+    <img src="{{url_for('static', filename='images/home.png')}}" alt="Ambulance Image">
+    <div class="ambulance-text">
+        <p>
+            Discover Safety, Embrace Assurance<br>
+            WeRespond, Your Emergency Sentinel
+        </p>
+    </div>
+    <!-- <div class="button-container">
+        <button type="button" class="btn btn-danger btn-login" onclick="window.location.href='login.html'">
+            Login
+        </button>
+        <button type="button" class="btn btn-outline-danger btn-signup" onclick="window.location.href='register.html'">
+            Sign Up
+        </button> -->
+        <button type="button" class="btn btn-danger btn-find">
+            <a href="{{ url_for('map') }}" class="text-white">Find an Ambulance</a>
+        </button>
+    </div>
+</div>
+
+
+<!-- Feature Section -->
+<div class="feature-section">
+    <div class="feature-item">
+        <i class="fas fa-user-shield fa-4x"></i>
+        <h1>Impeccable Safety</h1>
+        <p>Our service ensures impeccable safety for all users.</p>
+    </div>
+    <div class="feature-item">
+        <i class="far fa-id-badge fa-4x"></i>
+        <h1>Fully Licensed</h1>
+        <p>We are fully licensed to provide emergency services.</p>
+    </div>
+    <div class="feature-item">
+        <i class="fas fa-truck-medical fa-4x"></i>
+        <h1>Available 24/7</h1>
+        <p>Our ambulances are available round the clock to respond to emergencies.</p>
+    </div>
+</div>
+
+
+{%include 'footer.html'%}

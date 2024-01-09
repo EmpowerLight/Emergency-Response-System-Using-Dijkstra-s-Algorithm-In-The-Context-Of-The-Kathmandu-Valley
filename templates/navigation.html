@@ -1,0 +1,35 @@
+   
+    <link rel="stylesheet" href="{{url_for('static', filename='css/navigation.css')}}">
+    </head>
+
+<body>
+
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-sm navbar-dark">
+    <div class="container-fluid">
+        <a href="{{ url_for('home') }}" class="navbar-brand me-5 ms-4">SwiftSavior</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mynavbar">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">Gallery</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">Contact Us</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
