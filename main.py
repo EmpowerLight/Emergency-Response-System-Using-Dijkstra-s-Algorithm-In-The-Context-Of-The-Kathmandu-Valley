@@ -169,6 +169,26 @@ def map():
     return render_template("map.html")
 
 
+@app.route("/aboutus")
+def aboutus():
+    return render_template("aboutus.html")
+
+
+@app.route("/gallery")
+def gallery():
+    return render_template("gallery.html")
+
+
+@app.route("/services")
+def services():
+    return render_template("services.html")
+
+
+@app.route("/contactus")
+def contactus():
+    return render_template("contactus.html")
+
+
 @app.route("/")
 def home():
     return render_template("home.html")

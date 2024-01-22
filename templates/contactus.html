@@ -1,0 +1,49 @@
+{% include 'header.html' %}
+
+<!-- =contactus style -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contactUs.css') }}">
+
+{% include 'navigation.html' %}
+<div class="row mt-3 align-content-center">
+    <div class="col-3 offset-2 text-black">
+        <h4><i class="fa-solid fa-location-dot"></i> Our Office Address</h4>
+        <h6 class="info">Kathmandu, Nepal, 44600</h6>
+    </div>
+    <div class="col-3 text-black">
+        <h4><i class="fa-solid fa-envelope"></i> General Enquiries</h4>
+        <h6 class="info">abcxyz@abcdef.com</h6>
+    </div>
+    <div class="col-3 text-black">
+        <h4><i class="fa-solid fa-phone"></i> Call Us</h4>
+        <h6 class="info">01-4455667, 977-9876543210</h6>
+    </div>
+</div>
+
+<div class="row mb-3 m-3 pt-2 bg-light-subtle">
+    <div class="col-4 bg-light-subtle offset-1">
+        <h3>Get in Touch</h3>
+        <form>
+            <label for="fullname"><i class="fa-solid fa-user"></i>Full Name</label>
+            <input type="text" name="fullname" id="fullname" class="form-control">
+
+            <label for="email"><i class="fa-solid fa-envelope"></i>Email</label>
+            <input type="email" name="email" id="email" class="form-control">
+
+            <label for="phone"><i class="fa-solid fa-phone"></i>Phone</label>
+            <input type="text" name="phone" id="phone" class="form-control">
+
+            <label for="message"><i class="fa-solid fa-message"></i>Message</label>
+            <textarea name="message" id="message" class="form-control"></textarea>
+
+            <div class="mb-2">
+                <input type="submit" value="Submit" class="btn btn-danger">
+            </div>
+        </form>
+    </div>
+    <div class="col-6 p-3 ms-5">
+        <iframe width="90%" height="450"
+            src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=kathmandu+()&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+    </div>
+</div>
+
+{% include 'footer.html' %}

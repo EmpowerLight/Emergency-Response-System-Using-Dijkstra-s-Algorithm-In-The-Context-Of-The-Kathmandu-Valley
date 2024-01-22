@@ -1,0 +1,52 @@
+{% include 'header.html' %}
+
+<!-- =service style -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/services.css') }}">
+
+{% include 'navigation.html' %}
+
+<div class="row justify-content-center pt-2 px-5 mt-2 services-heading">Our SERVICES</div>
+
+<div class="row">
+  <div class="card">
+    <img src="{{ url_for('static', filename='images/hospitalco.jpg') }} " class="card-img-top" alt="Emergency Support">
+    <div class="card-body">
+      <h5 class="card-title">Quick Emergency Support</h5>
+      <p class="card-text">
+        In times of emergency, our response system is built to act quickly. We prioritize people's well-being and ensure prompt aid.
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src=" {{ url_for('static', filename='images/als.webp') }}" class="card-img-top" alt="Effective Route Scheduling">
+    <div class="card-body">
+      <h5 class="card-title">Effective Route Scheduling</h5>
+      <p class="card-text">
+        The most effective routes are planned to ensure that ambulances get to their destinations on time. This translates to quicker reaction times, particularly in crowded cities with intricate road systems.
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src=" {{ url_for('static', filename='images/lifesupport1.jpg') }}" class="card-img-top" alt="Customized for Kathmandu">
+    <div class="card-body">
+      <h5 class="card-title">Customized for Kathmandu</h5>
+      <p class="card-text">
+        Adapted to the specific requirements of the Kathmandu Valley, our approach is designed to efficiently address regional obstacles. We offer a dependable and customized emergency response service that adapts to unique circumstances.
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <img src=" {{ url_for('static', filename='images/last.jpg') }}" class="card-img-top" alt="Ambulance Dispatch">
+    <div class="card-body">
+      <h5 class="card-title">Ambulance Dispatch</h5>
+      <p class="card-text">
+        In the event that the ambulance is outside of the five kilometers, we'll head straight to the hospital and send out a backup ambulance.
+      </p>
+    </div>
+  </div>
+</div>
+
+{% include 'footer.html' %}
