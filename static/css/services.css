@@ -1,0 +1,81 @@
+/* Heading Style */
+.services-heading {
+    text-align: center;
+    cursor: default;
+    margin: 50px 0 30px;
+    color: #e61d27;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .services-heading:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Card Container Style */
+  .row {
+    display: flex;
+    justify-content: center;
+    gap: 20px; 
+  }
+  
+  /* Individual Card Style */
+  .card {
+    width: 20rem;
+    height: 30rem;
+    padding-top: 1rem;
+    background-color: #f8f9fa;
+    color: #343a40;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Card Image Style */
+  .card-img-top {
+    height: 10rem; 
+    width: 10rem;
+    margin: auto;
+    object-fit: cover;
+    border-radius: 100%;
+    border: 0.1rem solid #e61d27;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .card-img-top:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Card Body Style */
+  .card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Card Title Style */
+  .card-title {
+    color: #e61d27;
+    font-size: 1.8rem; 
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  /* Card Text Style */
+  .card-text {
+    color: #555;
+    flex-grow: 1;
+    margin-bottom: 15px;
+  }
+  
+  /* Hover Effect */
+  .card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  

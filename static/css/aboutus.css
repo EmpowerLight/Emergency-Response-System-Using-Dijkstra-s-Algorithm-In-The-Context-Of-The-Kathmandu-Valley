@@ -1,0 +1,50 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #fff; 
+}
+
+h1 {
+    cursor: default;
+    text-align: center;
+    margin: 50px 0 30px; 
+    color: #e61d27;
+    font-size: 2.5rem;
+    font-weight: bolder;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+h1:hover {
+    transform: scale(1.1); 
+}
+
+.core-value-item {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f1f1f1; 
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.core-value-item i {
+    font-size: 2.5rem;
+    color: #e61d27;
+}
+
+.core-value-item h5 {
+    font-size: 1.8rem;
+    color: #e61d27;
+    margin-top: 15px;
+}
+
+.core-value-item p {
+    font-size: 1rem;
+    color: #555;
+}
+
+@media only screen and (max-width: 768px) {
+    .core-value-item {
+        margin-right: 0; 
+    }
+}

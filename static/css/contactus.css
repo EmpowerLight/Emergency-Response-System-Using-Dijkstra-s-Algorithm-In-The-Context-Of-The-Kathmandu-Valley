@@ -1,0 +1,49 @@
+.row h3 {
+    text-align: center;
+    color: #E61D27;
+    font-weight: bolder;
+}
+
+.fa-solid {
+    color: #E61D27; 
+}
+
+.text-black h4 {
+    font-weight: bold;
+}
+
+.info {
+    font-size: 14px;
+    color: rgb(76, 70, 70);
+}
+
+.col-4 i {
+    font-size: 20px;
+    padding-right: 10px;
+}
+
+#message {
+    height: 150px;
+    resize: none;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label,
+form input,
+form textarea {
+    margin-bottom: 10px;
+}
+
+.btn-danger {
+    background-color: #e61d27;
+    color: white;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #d01722;
+}
