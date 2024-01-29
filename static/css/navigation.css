@@ -16,7 +16,6 @@ html, body {
 .navbar {
     padding: 15px 0;
     background-color: #E61D27;
-    height: 14vh;
 }
 
 .navbar-brand {
@@ -26,7 +25,7 @@ html, body {
     text-transform: uppercase;
     letter-spacing: 2px;
     margin-right: auto;
-    margin-left: 52px;
+    margin-left: 15px;
 }
 
 .navbar-brand:hover {
@@ -37,7 +36,6 @@ html, body {
     display: flex;
     align-items: center;
     margin-left: auto;
-    margin: 0 45px 0 auto;
 }
 
 .nav-item {
@@ -65,4 +63,23 @@ html, body {
 .nav-link:hover::before,
 .nav-link:focus::before {
     transform: scaleX(1);
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 767px) {
+    .navbar-brand {
+        margin-left: 0; 
+    }
+
+    .navbar-nav {
+        margin: 0;
+    }
+
+    .navbar-collapse {
+        margin-top: 15px; 
+    }
+
+    .nav-item {
+        margin: 10px 0;
+    }
 }

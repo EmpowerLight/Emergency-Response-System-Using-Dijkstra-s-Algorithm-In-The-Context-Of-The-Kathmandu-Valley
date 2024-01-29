@@ -1,0 +1,56 @@
+{% include 'header.html' %}
+
+<link rel="stylesheet" href="{{url_for('static', filename='css/register.css')}}">
+
+{%include 'navigation.html' %}
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-5 mt-5">
+            <form class="signup-form shadow p-3" onsubmit="return validForm()">
+                <h3>Sign up</h3>
+                <div class="mb-3">
+                    <label for="fname">First Name</label>
+                    <input type="text" name="fname" id="fname" class="form-control" placeholder="Enter your first name" onkeyup="fnameValidate()">
+                    <span id="fnameMsg"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="lname">Last Name</label>
+                    <input type="text" name="lname" id="lname" class="form-control" placeholder="Enter your last name" onkeyup="lnameValidate()">
+                    <span id="lnameMsg"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" onkeyup="emailValidate()" autocomplete="email">
+                    <span id="emailMsg"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone">Phone</label>
+                    <input type="tel" name="phone" id="phone" class="form-control" placeholder="Enter your phone number" onkeyup="phoneValidate()" autocomplete="tel">
+                    <span id="phoneMsg"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="pwd">Password</label>
+                    <input type="password" name="pwd" id="pwd" class="form-control" placeholder="Enter your password" onkeyup="pwdValidate()" autocomplete="new-password">
+                    <span id="pwdMsg"></span>
+                </div>
+
+                <div class="mb-3 mt-3">
+                    <input type="submit" value="Register" class="btn btn-danger">
+                </div>
+
+                <div class="mb-3">
+                    <h6>Already have an account? <b><a href="{{ url_for('login') }}" class="text-danger">Sign in</a></b></h6>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="{{url_for('static', filename='js/register.js')}}"></script>
+
+{% include 'footer.html' %}

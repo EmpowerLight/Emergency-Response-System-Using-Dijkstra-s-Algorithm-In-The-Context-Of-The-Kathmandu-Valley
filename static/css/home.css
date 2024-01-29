@@ -87,9 +87,6 @@
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
     white-space: nowrap; 
-    position: absolute;
-    top: 54%;
-    left: 20%;
 }
 
 .btn-find:hover {

@@ -1,0 +1,40 @@
+{% include 'header.html' %}
+
+<link rel="stylesheet" href="{{url_for('static', filename='css/login.css')}}">
+
+{%include 'navigation.html' %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5 mt-5">
+            <div class="login-form shadow p-3">
+                <h3>Sign in</h3>
+                <form onsubmit="return validForm()">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" onkeyup="emailValidate()" autocomplete="email">
+                        <span id="emailMsg"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pwd">Password</label>
+                        <input type="password" name="pwd" id="pwd" class="form-control" placeholder="Enter your password" onkeyup="pwdValidate()" autocomplete="current-password">
+                        <span id="pwdMsg"></span>
+                    </div>
+                    
+                    <div class="form-group mt-3">
+                        <input type="submit" value="Login" class="btn btn-danger">
+                    </div>
+
+                    <div class="form-group">
+                        <h6>Not Registered? <b><a href="{{ url_for('register') }}" class="text-danger">Create an Account</a></b></h6>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{url_for('static', filename='js/login.js')}}"></script>
+
+{% include 'footer.html' %}

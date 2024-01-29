@@ -13,16 +13,17 @@
             WeRespond, Your Emergency Sentinel
         </p>
     </div>
-    <!-- <div class="button-container">
-        <button type="button" class="btn btn-danger btn-login" onclick="window.location.href='login.html'">
+    <div class="button-container">
+        <button type="button" class="btn btn-danger btn-login" onclick="window.location.href='{{ url_for('login') }}'">
             Login
         </button>
-        <button type="button" class="btn btn-outline-danger btn-signup" onclick="window.location.href='register.html'">
+        
+        <button type="button" class="btn btn-outline-danger btn-signup" onclick="window.location.href='{{ url_for('register') }}'">
             Sign Up
-        </button> -->
-        <button type="button" class="btn btn-danger btn-find">
-            <a href="{{ url_for('map') }}" class="text-white">Find an Ambulance</a>
         </button>
+        <!-- <button type="button" class="btn btn-danger btn-find">
+            <a href="{{ url_for('map') }}" class="text-white">Find an Ambulance</a>
+        </button> -->
     </div>
 </div>
 
