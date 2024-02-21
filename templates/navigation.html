@@ -29,6 +29,11 @@
                 <li class="nav-item">
                     <a href="{{ url_for('contactus') }}" class="nav-link">Contact Us</a>
                 </li>
+                {% if current_user.is_authenticated: %}
+                <li class="nav-item">
+                    <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>

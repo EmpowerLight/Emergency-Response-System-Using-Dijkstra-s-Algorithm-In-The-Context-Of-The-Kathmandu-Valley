@@ -14,6 +14,7 @@
         </p>
     </div>
     <div class="button-container">
+        {% if not current_user.is_authenticated: %}
         <button type="button" class="btn btn-danger btn-login" onclick="window.location.href='{{ url_for('login') }}'">
             Login
         </button>
@@ -21,9 +22,11 @@
         <button type="button" class="btn btn-outline-danger btn-signup" onclick="window.location.href='{{ url_for('register') }}'">
             Sign Up
         </button>
-        <!-- <button type="button" class="btn btn-danger btn-find">
+        {% else: %}
+        <button type="button" class="btn btn-danger btn-find">
             <a href="{{ url_for('map') }}" class="text-white">Find an Ambulance</a>
-        </button> -->
+        </button>
+        {% endif %}
     </div>
 </div>
 

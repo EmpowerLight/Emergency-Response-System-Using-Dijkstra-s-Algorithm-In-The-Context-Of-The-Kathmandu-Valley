@@ -9,7 +9,7 @@
         <div class="col-md-5 mt-5">
             <div class="login-form shadow p-3">
                 <h3>Sign in</h3>
-                <form onsubmit="return validForm()">
+                <form onsubmit="return validForm()" action="{{ url_for('login') }}" method="POST">
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" onkeyup="emailValidate()" autocomplete="email">

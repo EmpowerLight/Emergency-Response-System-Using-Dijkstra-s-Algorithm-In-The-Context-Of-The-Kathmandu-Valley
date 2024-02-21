@@ -7,7 +7,7 @@
 <div class="container">
     <div class="row d-flex justify-content-center">
         <div class="col-md-5 mt-5">
-            <form class="signup-form shadow p-3" onsubmit="return validForm()">
+            <form class="signup-form shadow p-3" onsubmit="return validForm()" action="{{ url_for('register') }}" method="POST">
                 <h3>Sign up</h3>
                 <div class="mb-3">
                     <label for="fname">First Name</label>
