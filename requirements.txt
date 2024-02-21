@@ -9,9 +9,12 @@ cligj==0.7.2
 colorama==0.4.6
 fiona==1.9.5
 Flask==3.0.0
+Flask-Login==0.6.3
+Flask-SQLAlchemy==3.1.1
 geographiclib==2.0
 geopandas==0.14.1
 geopy==2.4.1
+greenlet==3.0.3
 idna==3.6
 itsdangerous==2.1.2
 Jinja2==3.1.2
@@ -33,7 +36,9 @@ scipy==1.11.4
 setuptools==69.0.3
 shapely==2.0.2
 six==1.16.0
+SQLAlchemy==2.0.27
 threadpoolctl==3.2.0
+typing_extensions==4.9.0
 tzdata==2023.3
 urllib3==2.1.0
 Werkzeug==3.0.1
