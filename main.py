@@ -61,6 +61,7 @@ def haversine(lat1, lon1, lat2, lon2):
 
 
 @app.route("/get_event_data")
+@login_required
 def get_event_data():
     event_data = pd.read_csv("data/event_data.csv")
     return event_data.to_json(orient='records')
@@ -107,6 +108,7 @@ def fetch_ambulance_data_single(row, event_latitude, event_longitude, radius):
 
 
 @app.route("/get_ambulance_data")
+@login_required
 def get_ambulance_data():
     try:
         event_latitude = float(request.args.get('event_latitude'))
@@ -123,6 +125,7 @@ def get_ambulance_data():
 
 
 @app.route("/get_shortest_path")
+@login_required
 def get_shortest_path():
     try:
         start_latitude = float(request.args.get('start_latitude'))
@@ -156,6 +159,7 @@ def get_shortest_path():
 
 
 @app.route("/get_hospital_data")
+@login_required
 def get_hospital_data():
     try: 
         event_latitude = float(request.args.get('event_latitude'))
@@ -171,6 +175,7 @@ def get_hospital_data():
 
 
 @app.route("/generate_pdf", methods=["POST"])
+@login_required
 def generate_pdf():
     # Retrieve data from the frontend
     data = request.json
@@ -246,13 +251,17 @@ def register():
 
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('home'))
 
 
 @app.route("/map")
+@login_required
 def map():
+    if not current_user.is_authenticated:
+        return redirect(url_for("login"))
     return render_template("map.html")
 
 
