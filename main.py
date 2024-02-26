@@ -60,6 +60,47 @@ def haversine(lat1, lon1, lat2, lon2):
     return distance
 
 
+def calculate_distance(zone, event_latitude, event_longitude):
+    zone_latitude = zone['Latitude']
+    zone_longitude = zone['Longitude']
+    distance = haversine(event_latitude, event_longitude, zone_latitude, zone_longitude)
+    return distance, zone['zone_type']
+
+def determine_zone_type(event_latitude, event_longitude):
+    try:
+        # Read zone data from CSV file
+        zone_data = pd.read_csv("data/zone_data.csv")
+        
+        # Ensure input validation
+        if not (-90 <= event_latitude <= 90) or not (-180 <= event_longitude <= 180):
+            raise ValueError("Invalid input latitude or longitude values.")
+        
+        # Use ThreadPoolExecutor to parallelize distance calculations
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = [executor.submit(calculate_distance, zone, event_latitude, event_longitude) for _, zone in zone_data.iterrows()]
+            results = [future.result() for future in concurrent.futures.as_completed(futures)]
+        
+        # Find the closest zone based on minimum distance
+        min_distance, closest_zone = min(results)
+        return closest_zone
+    
+    except Exception as e:
+        raise RuntimeError(f"Error determining zone type: {e}")
+
+@app.route("/classify_zone")
+@login_required
+def classify_zone():
+    try:
+        event_latitude = float(request.args.get('event_latitude'))
+        event_longitude = float(request.args.get('event_longitude'))
+        zone_type = determine_zone_type(event_latitude, event_longitude)
+        return jsonify({'zone_type': zone_type})
+    except ValueError as ve:
+        return jsonify(error=str(ve)), 400 
+    except Exception as e:
+        return jsonify(error=str(e)), 500  
+
+
 @app.route("/get_event_data")
 @login_required
 def get_event_data():

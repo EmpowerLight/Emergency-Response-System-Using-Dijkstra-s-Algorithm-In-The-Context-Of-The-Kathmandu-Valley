@@ -100,9 +100,9 @@ function placeHospital(map, hospitalData) {
         );
 }
 
-function placeEmergencyCircle(map, centerLatLng, radius) {
+function placeEmergencyCircle(map, centerLatLng, radius, color) {
     L.circle(centerLatLng, {
-        color: 'red',
+        color: color,
         fillColor: '#f03',
         fillOpacity: 0.7,
         radius: radius
@@ -133,12 +133,26 @@ async function getEvent() {
     }
 }
 
+async function getZoneType(eventLatitude, eventLongitude) {
+    try {
+        const response = await fetch(`/classify_zone?event_latitude=${eventLatitude}&event_longitude=${eventLongitude}`);
+        const zoneData = await response.json();
+        return zoneData.zone_type;
+    } catch (error) {
+        console.error('Error classifying zone:', error);
+        throw error;
+    }
+}
+
+
 //initMap function
 async function initMap() {
     try {
         // Fetch a random event
         const singleEvent = await getEvent();
         const eventOccurCoordinate = [singleEvent.Latitude, singleEvent.Longitude];
+
+        const zoneType = await getZoneType(eventOccurCoordinate[0], eventOccurCoordinate[1]);
         // Initialize the map
         const map = setupMap(eventOccurCoordinate, 14);
         const emojiPath = '../static/images/eventPersonemoji.png';
@@ -151,7 +165,7 @@ async function initMap() {
         const ambulanceData = JSON.parse(ambulance_data);
 
         // Place a circle on the map to indicate the radius
-        placeEmergencyCircle(map, eventOccurCoordinate, radius * 1000);
+        placeEmergencyCircle(map, eventOccurCoordinate, radius * 1000, zoneType);
 
         if (ambulanceData && ambulanceData.length >= 3) {
             // If ambulance is available, place the ambulance marker
@@ -160,7 +174,7 @@ async function initMap() {
             try {
                 // Show loading messages and initiate the shortest path calculation
                 loaderOverlay.style.display = 'flex';
-                messageContainer.innerHTML = `<p>Found an Ambulance within ${radius} Km radius. Calculating the shortest distance...</p>`;
+                messageContainer.innerHTML = `<p>Zone type: ${zoneType}. Found an Ambulance within ${radius} Km radius. Calculating the shortest distance...</p>`;
 
                 // Fetch the shortest path
                 const shortestPathData = await fetch(`/get_shortest_path?start_latitude=${ambulanceData[2]}&start_longitude=${ambulanceData[1]}&end_latitude=${eventOccurCoordinate[0]}&end_longitude=${eventOccurCoordinate[1]}`);
