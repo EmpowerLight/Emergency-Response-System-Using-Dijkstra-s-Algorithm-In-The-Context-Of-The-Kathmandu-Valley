@@ -34,7 +34,31 @@
         </div>
     </div>
 </div>
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div id="myDiv">
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+                <button class="btn btn-danger" onclick="toggleDiv()">ok</button>
+            </div>
+        {% endif %}
+    {% endwith %}
 
+    <script>
+       function toggleDiv() {
+            var div = document.getElementById("myDiv");
+            if (div.style.display === "none") {
+                div.style.display = "block";
+            } else {
+                div.classList.add("slide-out");
+                setTimeout(() => {
+                    div.style.display = "none";
+                    div.classList.remove("slide-out");
+                }, 300); 
+            }
+        }
+    </script>
 <script src="{{url_for('static', filename='js/login.js')}}"></script>
 
 {% include 'footer.html' %}
